@@ -7,7 +7,7 @@
 <!-- Optional: Coverage -->
 <!-- ![Coverage](https://img.shields.io/codecov/c/github/arnavchaddha/ci-cd-starterkit) -->
 
-A fully tested, production‑ready Flask starter with:
+This is a helpful framework that's fully tested and a production‑ready Flask app starter which allows users to deploy their own flask app for personal projects, apps and professional deployment. Features include:
 
 -  pytest + coverage gating
 -  flake8 + mypy static checks
