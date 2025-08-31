@@ -1,13 +1,15 @@
-# tests/test_main.py
 from app.main import create_app
+
 
 def _client():
     return create_app().test_client()
+
 
 def test_status_and_ready():
     c = _client()
     assert c.get("/status").status_code == 200
     assert c.get("/readyz").status_code == 200
+
 
 def test_echo_and_time_uuid_hash():
     c = _client()
@@ -15,15 +17,23 @@ def test_echo_and_time_uuid_hash():
     assert "utc_iso" in c.get("/time").get_json()
     assert len(c.get("/uuid").get_json()["uuid"]) >= 32
     h = c.get("/hash?text=abc").get_json()
-    assert h["hash"] == "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+    assert h["hash"] == (
+        "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+    )
+
 
 def test_random_and_email():
     c = _client()
     j = c.get("/random?min=1&max=3&n=5").get_json()
     assert len(j["numbers"]) == 5
     assert all(1 <= x <= 3 for x in j["numbers"])
-    assert c.get("/validate-email?email=test@example.com").get_json()["valid"] is True
-    assert c.get("/validate-email?email=bad@").get_json()["valid"] is False
+
+    res_ok = c.get("/validate-email?email=test@example.com").get_json()
+    assert res_ok["valid"] is True
+
+    res_bad = c.get("/validate-email?email=bad@").get_json()
+    assert res_bad["valid"] is False
+
 
 def test_todos_crud():
     c = _client()

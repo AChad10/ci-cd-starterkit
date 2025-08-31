@@ -1,6 +1,4 @@
-# app/main.py
 import hashlib
-import json
 import logging
 import os
 import random
@@ -10,23 +8,27 @@ from uuid import uuid4
 
 from flask import Flask, jsonify, request
 
+
 # ───────────────────────────────
 # App factory
 # ───────────────────────────────
 def create_app() -> Flask:
     astro_app = Flask(__name__)
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)s %(message)s",
+    )
 
     # in-memory demo store (resets on restart)
     starling_todos: dict[int, dict] = {}
     comet_id_counter = 0
 
     # ─── Health / readiness ─────────────────────────────────────────────
-    @astro_app.get("/status")               # liveness probe
+    @astro_app.get("/status")  # liveness probe
     def status_probe():
         return jsonify({"ok": True, "service": "ci-starter-kit"}), 200
 
-    @astro_app.get("/readyz")               # readiness probe
+    @astro_app.get("/readyz")  # readiness probe
     def readiness_probe():
         # place quick dependency checks here (db ping, etc.)
         return jsonify({"ready": True}), 200
@@ -52,7 +54,9 @@ def create_app() -> Flask:
         """SHA256 of ?text=... (useful for quick checks)"""
         txt = request.args.get("text", "")
         digest = hashlib.sha256(txt.encode("utf-8")).hexdigest()
-        return jsonify({"algorithm": "sha256", "hash": digest}), 200
+        return jsonify(
+            {"algorithm": "sha256", "hash": digest}
+        ), 200
 
     @astro_app.get("/random")
     def random_numbers():
@@ -60,11 +64,13 @@ def create_app() -> Flask:
         try:
             lo = int(request.args.get("min", "0"))
             hi = int(request.args.get("max", "100"))
-            n  = int(request.args.get("n",  "1"))
+            n = int(request.args.get("n", "1"))
         except ValueError:
             return jsonify({"error": "min/max/n must be integers"}), 400
+
         if lo > hi or n < 1 or n > 1000:
             return jsonify({"error": "bad range or n out of bounds"}), 400
+
         nums = [random.randint(lo, hi) for _ in range(n)]
         return jsonify({"numbers": nums, "min": lo, "max": hi, "n": n}), 200
 
@@ -72,7 +78,12 @@ def create_app() -> Flask:
     def validate_email():
         """basic RFC-ish email check without extra libs"""
         candidate = request.args.get("email", "")
-        ok = bool(re.fullmatch(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}", candidate))
+        ok = bool(
+            re.fullmatch(
+                r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}",
+                candidate,
+            )
+        )
         return jsonify({"email": candidate, "valid": ok}), 200
 
     # ─── Tiny TODO CRUD (no DB, just RAM) ───────────────────────────────
@@ -87,11 +98,18 @@ def create_app() -> Flask:
             payload = request.get_json(force=True)
         except Exception:
             return jsonify({"error": "invalid JSON"}), 400
+
         title = (payload or {}).get("title")
         if not isinstance(title, str) or not title.strip():
             return jsonify({"error": "title is required"}), 400
+
         comet_id_counter += 1
-        item = {"id": comet_id_counter, "title": title.strip(), "done": False}
+        item = {
+            "id": comet_id_counter,
+            "title": title.strip(),
+            "done": False,
+        }
+
         starling_todos[item["id"]] = item
         return jsonify(item), 201
 
@@ -99,18 +117,23 @@ def create_app() -> Flask:
     def update_todo(tid: int):
         if tid not in starling_todos:
             return jsonify({"error": "not found"}), 404
+
         try:
             payload = request.get_json(force=True) or {}
         except Exception:
             return jsonify({"error": "invalid JSON"}), 400
+
         if "title" in payload:
-            if not isinstance(payload["title"], str) or not payload["title"].strip():
+            title_val = payload["title"]
+            if not isinstance(title_val, str) or not title_val.strip():
                 return jsonify({"error": "bad title"}), 400
-            starling_todos[tid]["title"] = payload["title"].strip()
+            starling_todos[tid]["title"] = title_val.strip()
+
         if "done" in payload:
             if not isinstance(payload["done"], bool):
                 return jsonify({"error": "done must be boolean"}), 400
-            starling_todos[tid]["done"] = payload["done"]
+        starling_todos[tid]["done"] = payload["done"]
+
         return jsonify(starling_todos[tid]), 200
 
     @astro_app.delete("/todos/<int:tid>")
