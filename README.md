@@ -1,4 +1,4 @@
-# 🧪 CI/CD Starter Kit (Flask)
+#  CI/CD Starter Kit (Flask)
 
 [![CI](https://github.com/AChad10/ci-cd-starterkit/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/AChad10/ci-cd-starterkit/actions)
 ![Python](https://img.shields.io/badge/python-3.11-blue)
@@ -17,7 +17,7 @@ This is a helpful framework that's fully tested and a production‑ready Flask a
 
 ---
 
-## 🚀 Quickstart
+##  Quickstart
 
 ```bash
 # Run directly
@@ -29,7 +29,7 @@ docker run -p 8080:8080 ci-starter-kit
 
 ```
 
-## 📡 API Endpoints
+## API Endpoints
 
 Base URL (local): `http://localhost:8080`
 
@@ -66,7 +66,7 @@ Base URL (local): `http://localhost:8080`
 
 ---
 
-## 🧪 What the Tests Cover
+##  What the Tests Cover
 
 File: `tests/test_main.py`
 
@@ -90,7 +90,7 @@ File: `tests/test_main.py`
 
 ---
 
-## 🧪 Quick cURL Examples
+##  Quick cURL Examples
 
 ```bash
 # Health
