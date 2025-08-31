@@ -1,6 +1,6 @@
 # 🧪 CI/CD Starter Kit (Flask)
 
-[![CI](https://github.com/AChad10/ci-cd-starterkit/actions/workflows/ci.yml/badge.svg)](https://github.com/AChad10/ci-cd-starterkit/actions)
+[![CI](https://github.com/AChad10/ci-cd-starterkit/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/AChad10/ci-cd-starterkit/actions)
 ![Python](https://img.shields.io/badge/python-3.11-blue)
 ![Dockerized](https://img.shields.io/badge/docker-ready-brightgreen)
 ![Tested](https://img.shields.io/badge/tests-passing-success)
