@@ -136,6 +136,14 @@ def create_app() -> Flask:
 
         return jsonify(starling_todos[tid]), 200
 
+    @astro_app.get("/whoami")
+    def whoami():
+        return jsonify({
+            "ip": request.headers.get("X-Forwarded-For", request.remote_addr),
+            "user_agent": request.headers.get("User-Agent"),
+            "headers": {k: v for k, v in request.headers.items()},
+        }), 200
+
     @astro_app.delete("/todos/<int:tid>")
     def delete_todo(tid: int):
         if tid not in starling_todos:
