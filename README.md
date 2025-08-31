@@ -9,11 +9,11 @@
 
 A fully tested, production‑ready Flask starter with:
 
-- 🧪 pytest + coverage gating
-- 🧼 flake8 + mypy static checks
+-  pytest + coverage gating
+-  flake8 + mypy static checks
 - 🐳 Docker container build
-- 🤖 GitHub Actions CI pipeline
-- 🧠 In-memory utility API (useful out of the box)
+-  GitHub Actions CI pipeline
+-  In-memory utility API (useful out of the box)
 
 ---
 
